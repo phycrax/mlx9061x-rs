@@ -1,5 +1,5 @@
 /// All possible errors in this crate
-#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug)]
 pub enum Error<E> {
     /// I²C bus error
@@ -19,7 +19,7 @@ pub mod ic {
 }
 
 /// Possible slave addresses
-#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum SlaveAddr {
     /// Default slave address
