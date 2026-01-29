@@ -68,13 +68,13 @@ fn main() {
 ```
 
 ## Features
-### defmt-03
+### defmt
 
-To enable [defmt](https://crates.io/crates/defmt) (version `0.3.x`) support, when specifying the dependency on `mlx9061x`, add the feature "`defmt-03`".
+To enable [defmt](https://crates.io/crates/defmt) support, when specifying the dependency on `mlx9061x`, add the feature "`defmt`".
 
 ```toml
 [dependencies]
-mlx9061x = { version = "0.3.0", features = ["defmt-03"] }
+mlx9061x = { version = "0.3.0", features = ["defmt"] }
 ```
 
 ## Support

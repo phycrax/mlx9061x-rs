@@ -21,10 +21,10 @@ jobs:
           - thumbv7em-none-eabi
           - thumbv7em-none-eabihf
           - thumbv7m-none-eabi
-        features: ['', '--features=defmt-03']
+        features: ['', '--features=defmt']
         exclude:
           - rust: 1.62.0
-            features: '--features=defmt-03'
+            features: '--features=defmt'
 
     steps:
       - uses: actions/checkout@v4
