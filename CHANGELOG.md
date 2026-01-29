@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - [breaking-change] Changed return type of the `raw_ir`, `raw_ir_channel1` and `raw_ir_channel2` methods to `i16` to fix
   a readout conversion error.
+- [breaking-change] Updated defmt dependency to `1.x` and renamed feature `defmt-03` to `defmt`.
 
 ## [0.3.0] - 2024-05-23
 
