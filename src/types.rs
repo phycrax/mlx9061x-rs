@@ -34,3 +34,43 @@ impl Default for SlaveAddr {
         SlaveAddr::Default
     }
 }
+
+/// Temperature value
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Temperature(
+    /// Raw temperature value
+    pub u16,
+);
+
+impl Temperature {
+    /// Temperature in kelvin
+    pub fn kelvin(&self) -> f32 {
+        self.0 as f32 * 0.02
+    }
+
+    /// Temperature in celsius
+    pub fn celsius(&self) -> f32 {
+        self.kelvin() - 273.15
+    }
+
+    /// Temperature in fahrenheit
+    pub fn fahrenheit(&self) -> f32 {
+        self.kelvin() * 9.0 / 5.0 - 459.67
+    }
+
+    /// Temperature in millikelvin
+    pub fn millikelvin(&self) -> u32 {
+        self.0 as u32 * 20
+    }
+
+    /// Temperature in millicelsius
+    pub fn millicelsius(&self) -> i32 {
+        self.millikelvin() as i32 - 273150
+    }
+
+    /// Temperature in millifahrenheit
+    pub fn millifahrenheit(&self) -> i32 {
+        self.millikelvin() as i32 * 900 - 459670
+    }
+}
