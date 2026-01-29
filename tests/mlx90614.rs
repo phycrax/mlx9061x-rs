@@ -22,12 +22,27 @@ macro_rules! read_f32_test {
         );
     };
 }
-read_f32_test!(read_ta1, ambient_temperature, Reg::TA, 225, 57, 233, 23.19);
-read_f32_test!(read_ta2, ambient_temperature, Reg::TA, 97, 58, 86, 25.75);
-read_f32_test!(read_ta3, ambient_temperature, Reg::TA, 107, 58, 212, 25.95);
-read_f32_test!(read_ta4, ambient_temperature, Reg::TA, 38, 58, 102, 24.57);
+macro_rules! read_temp_test {
+    ($name:ident, $method:ident, $reg:expr, $data0:expr, $data1:expr, $data2:expr, $expected:expr) => {
+        read_temp_test_base!(
+            $name,
+            new_mlx90614,
+            mlx90614::DEV_ADDR,
+            $method,
+            $reg,
+            $data0,
+            $data1,
+            $data2,
+            $expected
+        );
+    };
+}
+read_temp_test!(read_ta1, ambient_temperature, Reg::TA, 225, 57, 233, 23.19);
+read_temp_test!(read_ta2, ambient_temperature, Reg::TA, 97, 58, 86, 25.75);
+read_temp_test!(read_ta3, ambient_temperature, Reg::TA, 107, 58, 212, 25.95);
+read_temp_test!(read_ta4, ambient_temperature, Reg::TA, 38, 58, 102, 24.57);
 
-read_f32_test!(
+read_temp_test!(
     read_object1_temp,
     object1_temperature,
     Reg::TOBJ1,
@@ -37,7 +52,7 @@ read_f32_test!(
     24.57
 );
 
-read_f32_test!(
+read_temp_test!(
     read_object2_temp,
     object2_temperature,
     Reg::TOBJ2,
@@ -45,42 +60,6 @@ read_f32_test!(
     58,
     162,
     24.57
-);
-
-read_u16_test!(
-    read_ta_as_int,
-    new_mlx90614,
-    mlx90614::DEV_ADDR,
-    ambient_temperature_as_int,
-    Reg::TA,
-    0x0,
-    0x3A,
-    0xB6,
-    0x17
-);
-
-read_u16_test!(
-    read_object1_temp_as_int,
-    new_mlx90614,
-    mlx90614::DEV_ADDR,
-    object1_temperature_as_int,
-    Reg::TOBJ1,
-    0x26,
-    0x3A,
-    0x70,
-    0x18
-);
-
-read_u16_test!(
-    read_object2_temp_as_int,
-    new_mlx90614,
-    mlx90614::DEV_ADDR,
-    object2_temperature_as_int,
-    Reg::TOBJ2,
-    0x26,
-    0x3A,
-    0xA2,
-    0x18
 );
 
 read_i16_test!(

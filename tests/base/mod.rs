@@ -93,7 +93,7 @@ macro_rules! read_f32_test_base {
 }
 
 #[macro_export]
-macro_rules! read_u16_test {
+macro_rules! read_temp_test_base {
     ($name:ident, $create:ident, $address:expr, $method:ident, $reg:expr, $data0:expr, $data1:expr, $data2:expr, $expected:expr) => {
         #[test]
         fn $name() {
@@ -103,7 +103,7 @@ macro_rules! read_u16_test {
                 vec![$data0, $data1, $data2],
             )]);
             let t = sensor.$method().unwrap();
-            assert_eq!(t, $expected);
+            assert_near!(t.celsius(), $expected, 0.1);
             destroy(sensor);
         }
     };
