@@ -71,6 +71,6 @@ impl Temperature {
 
     /// Temperature in millifahrenheit
     pub fn millifahrenheit(&self) -> i32 {
-        self.millikelvin() as i32 * 900 - 459670
+        self.millikelvin() as i32 * 9 / 5 - 459670
     }
 }
