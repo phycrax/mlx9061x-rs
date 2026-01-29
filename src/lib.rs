@@ -82,8 +82,8 @@
 //! let dev = I2cdev::new("/dev/i2c-1").unwrap();
 //! let addr = SlaveAddr::default();
 //! let mut sensor = Mlx9061x::new_mlx90614(dev, addr, 5).unwrap();
-//! let obj_temp = sensor.object1_temperature().unwrap_or(-1.0);
-//! println!("Object temperature: {:.2}ºC", obj_temp);
+//! let obj_temp = sensor.object1_temperature().unwrap();
+//! println!("Object temperature: {:.2}ºC", obj_temp.celsius());
 //! ```
 //!
 //! ### Read the ambient temperature with an MLX90615
@@ -95,8 +95,8 @@
 //! # let dev = I2cdev::new("/dev/i2c-1").unwrap();
 //! let addr = SlaveAddr::default();
 //! let mut sensor = Mlx9061x::new_mlx90615(dev, addr, 5).unwrap();
-//! let temp = sensor.ambient_temperature().unwrap_or(-1.0);
-//! println!("Ambient temperature: {:.2}ºC", temp);
+//! let temp = sensor.ambient_temperature().unwrap();
+//! println!("Ambient temperature: {:.2}ºC", temp.celsius());
 //! ```
 //!
 //! ### Get the device ID of an MLX90614
@@ -108,7 +108,7 @@
 //! # let dev = I2cdev::new("/dev/i2c-1").unwrap();
 //! # let addr = SlaveAddr::default();
 //! let mut sensor = Mlx9061x::new_mlx90614(dev, addr, 5).unwrap();
-//! let id = sensor.device_id().unwrap_or(0);
+//! let id = sensor.device_id().unwrap();
 //! println!("ID: 0x{:x?}", id);
 //! ```
 //!

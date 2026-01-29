@@ -62,7 +62,7 @@ fn main() {
     let mut sensor = Mlx9061x::new_mlx90614(dev, addr, 5).unwrap();
     loop {
         let obj_temp = sensor.object1_temperature().unwrap();
-        println!("Object temperature: {:.2}ºC", obj_temp);
+        println!("Object temperature: {:.2}ºC", obj_temp.celsius());
     }
 }
 ```
