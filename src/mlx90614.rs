@@ -3,6 +3,7 @@
 use crate::{
     ic,
     register_access::mlx90614::{self, Register, DEV_ADDR},
+    types::Config,
     Error, Mlx9061x, SlaveAddr,
 };
 use core::marker::PhantomData;
@@ -122,6 +123,19 @@ where
             return Err(Error::InvalidInputData);
         }
         self.write_u16_eeprom(Register::EMISSIVITY, eps, delay)
+    }
+
+    pub fn config_1(&mut self) -> Result<Config, Error<E>> {
+        self.read_u16(Register::CONFIG_1)
+            .map(|bits| Config::from_bits(bits))
+    }
+
+    pub fn set_config_1<D: DelayNs>(
+        &mut self,
+        config: Config,
+        delay: &mut D,
+    ) -> Result<(), Error<E>> {
+        self.write_u16_eeprom(Register::CONFIG_1, config.as_bits(), delay)
     }
 
     /// Get the device ID
