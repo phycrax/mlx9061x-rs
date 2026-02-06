@@ -10,6 +10,8 @@ pub enum Error<E> {
     InvalidInputData,
     /// Bad eeprom write
     BadEepromWrite,
+    /// Bad temperature reading
+    BadTempRead,
 }
 
 /// IC marker

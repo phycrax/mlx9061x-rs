@@ -37,22 +37,26 @@ where
 
     /// Read the ambient temperature
     pub fn ambient_temperature(&mut self) -> Result<Temperature, Error<E>> {
-        let t = self.read_u16(Register::TA)?;
-        Ok(Temperature(t))
+        self.read_u16(Register::TA).map(Self::convert_to_temp?)
     }
 
     /// Read the object 1 temperature
     pub fn object1_temperature(&mut self) -> Result<Temperature, Error<E>> {
-        let t = self.read_u16(Register::TOBJ1)?;
-        Ok(Temperature(t))
+        self.read_u16(Register::TOBJ1).map(Self::convert_to_temp?)
     }
 
     /// Read the object 2 temperature
     ///
     /// Note that this is only available in dual-zone thermopile device variants.
     pub fn object2_temperature(&mut self) -> Result<Temperature, Error<E>> {
-        let t = self.read_u16(Register::TOBJ2)?;
-        Ok(Temperature(t))
+        self.read_u16(Register::TOBJ2).map(Self::convert_to_temp?)
+    }
+
+    fn convert_to_temp(raw: u16) -> Result<Temperature, Error<E>> {
+        if raw & 0x8000 != 0 {
+            return Err(Error::BadTempRead);
+        }
+        Ok(Temperature(raw))
     }
 
     /// Read the channel 1 raw IR data
