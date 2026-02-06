@@ -11,7 +11,7 @@ pub enum Error<E> {
     /// Bad eeprom write
     BadEepromWrite,
     /// Bad temperature reading
-    BadTempRead,
+    BadRead(Temperature),
 }
 
 /// IC marker

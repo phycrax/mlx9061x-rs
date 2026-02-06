@@ -54,7 +54,7 @@ where
 
     fn convert_to_temp(raw: u16) -> Result<Temperature, Error<E>> {
         if raw & 0x8000 != 0 {
-            return Err(Error::BadTempRead);
+            return Err(Error::BadRead(Temperature(raw & 0x7FFF)));
         }
         Ok(Temperature(raw))
     }
