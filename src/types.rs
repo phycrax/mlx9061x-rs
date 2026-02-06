@@ -8,6 +8,8 @@ pub enum Error<E> {
     ChecksumMismatch,
     /// Invalid input data
     InvalidInputData,
+    /// Bad eeprom write
+    BadEepromWrite,
 }
 
 /// IC marker

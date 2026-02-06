@@ -136,7 +136,15 @@ where
         config: Config,
         delay: &mut D,
     ) -> Result<(), Error<E>> {
-        self.write_u16_eeprom(Register::CONFIG_1, config.as_bits(), delay)
+        self.write_u16_eeprom(Register::CONFIG_1, 0, delay)?;
+        delay.delay_ms(u32::from(self.eeprom_write_delay_ms));
+        self.write_u16_eeprom(Register::CONFIG_1, config.as_bits(), delay)?;
+        delay.delay_ms(u32::from(self.eeprom_write_delay_ms));
+        if config == self.config_1()? {
+            Ok(())
+        } else {
+            Err(Error::BadEepromWrite)
+        }
     }
 
     /// Get the device ID
