@@ -216,21 +216,21 @@ pub enum PwmMode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Fir {
-    /// 8
+    /// Not recommended
     Step8 = 0b000,
-    /// 16
+    /// Not recommended
     Step16 = 0b001,
-    /// 32
+    /// Not recommended
     Step32 = 0b010,
-    /// 64
+    /// Not recommended
     Step64 = 0b011,
-    /// 128
+    /// Single sensor RR = 36ms, Dual sensor RR = 53ms
     Step128 = 0b100,
-    /// 256
+    /// Single sensor RR = 44ms, Dual sensor RR = 53ms
     Step256 = 0b101,
-    /// 512
+    /// Single sensor RR = 60ms, Dual sensor RR = 90ms
     Step512 = 0b110,
-    /// 1024
+    /// Single sensor RR = 93ms, Dual sensor RR = 138ms
     Step1024 = 0b111,
 }
 
@@ -282,8 +282,7 @@ pub struct Config {
 }
 
 impl Config {
-    /// Convert from raw bits
-    pub fn from_bits(bits: u16) -> Self {
+    fn from_bits(bits: u16) -> Self {
         let iir = match bits & 0b111 {
             0b000 => Iir::Step50,
             0b001 => Iir::Step25,
@@ -349,8 +348,7 @@ impl Config {
         }
     }
 
-    /// Convert to raw bits
-    pub fn as_bits(&self) -> u16 {
+    fn as_bits(&self) -> u16 {
         let mut bits = 0u16;
 
         bits |= self.iir as u16;

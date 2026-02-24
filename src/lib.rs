@@ -220,8 +220,12 @@
 #![allow(clippy::manual_range_contains)]
 
 use core::marker::PhantomData;
+
+/// MLX90614 Specifics
 pub mod mlx90614;
+/// MLX90615 Specifics
 pub mod mlx90615;
+
 mod types;
 pub use crate::types::{ic, Error, SlaveAddr};
 mod common;
