@@ -37,19 +37,19 @@ where
 
     /// Read the ambient temperature
     pub fn ambient_temperature(&mut self) -> Result<Temperature, Error<E>> {
-        self.read_u16(Register::TA).map(Self::convert_to_temp?)
+        Self::convert_to_temp(self.read_u16(Register::TA)?)
     }
 
     /// Read the object 1 temperature
     pub fn object1_temperature(&mut self) -> Result<Temperature, Error<E>> {
-        self.read_u16(Register::TOBJ1).map(Self::convert_to_temp?)
+        Self::convert_to_temp(self.read_u16(Register::TOBJ1)?)
     }
 
     /// Read the object 2 temperature
     ///
     /// Note that this is only available in dual-zone thermopile device variants.
     pub fn object2_temperature(&mut self) -> Result<Temperature, Error<E>> {
-        self.read_u16(Register::TOBJ2).map(Self::convert_to_temp?)
+        Self::convert_to_temp(self.read_u16(Register::TOBJ2)?)
     }
 
     fn convert_to_temp(raw: u16) -> Result<Temperature, Error<E>> {
