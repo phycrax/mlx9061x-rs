@@ -95,8 +95,7 @@ where
 
     /// Get the configuration register 1
     pub fn config_1(&mut self) -> Result<Config, Error<E>> {
-        self.read_u16(Register::CONFIG_1)
-            .map(|bits| Config::from_bits(bits))
+        self.read_u16(Register::CONFIG_1).map(Config::from_bits)
     }
 
     /// Set the configuration register 1
@@ -105,8 +104,6 @@ where
         config: Config,
         delay: &mut D,
     ) -> Result<(), Error<E>> {
-        self.write_u16_eeprom(Register::CONFIG_1, 0, delay)?;
-        delay.delay_ms(u32::from(self.eeprom_write_delay_ms));
         self.write_u16_eeprom(Register::CONFIG_1, config.as_bits(), delay)?;
         delay.delay_ms(u32::from(self.eeprom_write_delay_ms));
         if config == self.config_1()? {
@@ -145,7 +142,6 @@ pub fn wake_mlx90614<E, SclPin: OutputPin<Error = E>, SdaPin: OutputPin<Error = 
 /// IIR filter settings (Bits 0-2)
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum Iir {
     /// 50% - a1=0.5, b=0.5
     Step50 = 0b000,
@@ -168,7 +164,6 @@ pub enum Iir {
 /// PWM mode configuration (Bits 4-5)
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum PwmMode {
     /// PWM mode - Ta, Tobj1
     TaTobj1 = 0b00,
@@ -183,30 +178,28 @@ pub enum PwmMode {
 /// FIR filter settings (Bits 8-10)
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum Fir {
-    /// 8
+    /// Not recommended
     Step8 = 0b000,
-    /// 16
+    /// Not recommended
     Step16 = 0b001,
-    /// 32
+    /// Not recommended
     Step32 = 0b010,
-    /// 64
+    /// Not recommended
     Step64 = 0b011,
-    /// 128
+    /// Single sensor RR = 36ms, Dual sensor RR = 53ms
     Step128 = 0b100,
-    /// 256
+    /// Single sensor RR = 44ms, Dual sensor RR = 53ms
     Step256 = 0b101,
-    /// 512
+    /// Single sensor RR = 60ms, Dual sensor RR = 90ms
     Step512 = 0b110,
-    /// 1024
+    /// Single sensor RR = 93ms, Dual sensor RR = 138ms
     Step1024 = 0b111,
 }
 
 /// Amplifier gain settings (Bits 11-13)
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum Gain {
     /// Gain = 1
     Gain1 = 0b000,
@@ -251,8 +244,7 @@ pub struct Config {
 }
 
 impl Config {
-    /// Convert from raw bits
-    pub fn from_bits(bits: u16) -> Self {
+    fn from_bits(bits: u16) -> Self {
         let iir = match bits & 0b111 {
             0b000 => Iir::Step50,
             0b001 => Iir::Step25,
@@ -318,8 +310,7 @@ impl Config {
         }
     }
 
-    /// Convert to raw bits
-    pub fn as_bits(&self) -> u16 {
+    fn as_bits(&self) -> u16 {
         let mut bits = 0u16;
 
         bits |= self.iir as u16;

@@ -194,7 +194,7 @@
 //! # }
 //! # let sda = IoPin;
 //! # let scl = IoPin;
-//! use mlx9061x::{Mlx9061x, SlaveAddr, wake_mlx90614};
+//! use mlx9061x::{Mlx9061x, SlaveAddr, mlx90614::wake_mlx90614};
 //!
 //! let i2cdev = I2c1::new(scl, sda); // This depends on your HAL
 //! let addr = SlaveAddr::default();
@@ -220,8 +220,12 @@
 #![allow(clippy::manual_range_contains)]
 
 use core::marker::PhantomData;
+
+/// MLX90614 Specifics
 pub mod mlx90614;
+/// MLX90615 Specifics
 pub mod mlx90615;
+
 mod types;
 pub use crate::types::{ic, Error, SlaveAddr, Temperature};
 mod common;
