@@ -126,8 +126,7 @@ where
 
     /// Get the configuration register 1
     pub fn config_1(&mut self) -> Result<Config, Error<E>> {
-        self.read_u16(Register::CONFIG_1)
-            .map(|bits| Config::from_bits(bits))
+        self.read_u16(Register::CONFIG_1).map(Config::from_bits)
     }
 
     /// Set the configuration register 1
