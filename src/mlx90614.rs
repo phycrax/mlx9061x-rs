@@ -397,72 +397,78 @@ mod config_tests {
         assert_eq!(ALL_ZERO_CONFIG.as_bits(), 0x0000);
     }
 
+    const ALL_ONES_CONFIG: Config = Config {
+        iir: Iir::Step57,
+        repeat_sensor_selftest: true,
+        pwm_mode: PwmMode::Tobj1Tobj2,
+        dual_ir_sensor: true,
+        ks_sign_negative: true,
+        fir: Fir::Step1024,
+        gain: Gain::Gain100Alt,
+        kt2_sign_negative: true,
+        sensor_selftest_disabled: true,
+    };
+
     // from_bits / as_bits: all ones
     #[test]
     fn from_bits_all_ones() {
-        let cfg = Config::from_bits(0xFFFF);
-        assert_eq!(cfg.iir, Iir::Step57); // bits 0-2 = 0b111
-        assert!(cfg.repeat_sensor_selftest); // bit 3
-        assert_eq!(cfg.pwm_mode, PwmMode::Tobj1Tobj2); // bits 4-5 = 0b11
-        assert!(cfg.dual_ir_sensor); // bit 6
-        assert!(cfg.ks_sign_negative); // bit 7
-        assert_eq!(cfg.fir, Fir::Step1024); // bits 8-10 = 0b111
-        assert_eq!(cfg.gain, Gain::Gain100Alt); // bits 11-13 = 0b111
-        assert!(cfg.kt2_sign_negative); // bit 14
-        assert!(cfg.sensor_selftest_disabled); // bit 15
+        assert_eq!(Config::from_bits(0xFFFF), ALL_ONES_CONFIG);
     }
 
     #[test]
     fn as_bits_all_ones() {
-        let cfg = Config {
-            iir: Iir::Step57,
-            repeat_sensor_selftest: true,
-            pwm_mode: PwmMode::Tobj1Tobj2,
-            dual_ir_sensor: true,
-            ks_sign_negative: true,
-            fir: Fir::Step1024,
-            gain: Gain::Gain100Alt,
-            kt2_sign_negative: true,
-            sensor_selftest_disabled: true,
-        };
-        assert_eq!(cfg.as_bits(), 0xFFFF);
+        assert_eq!(ALL_ONES_CONFIG.as_bits(), 0xFFFF);
     }
 
     // Individual boolean flags
     #[test]
     fn bit3_repeat_sensor_selftest() {
-        let cfg = Config::from_bits(1 << 3);
-        assert!(cfg.repeat_sensor_selftest);
-        assert_eq!(cfg.iir, Iir::Step50); // other fields stay zero
-        assert_eq!(cfg.as_bits(), 1 << 3);
+        let expected = Config {
+            repeat_sensor_selftest: true,
+            ..ALL_ZERO_CONFIG
+        };
+        assert_eq!(Config::from_bits(1 << 3), expected);
+        assert_eq!(expected.as_bits(), 1 << 3);
     }
 
     #[test]
     fn bit6_dual_ir_sensor() {
-        let cfg = Config::from_bits(1 << 6);
-        assert!(cfg.dual_ir_sensor);
-        assert_eq!(cfg.as_bits(), 1 << 6);
+        let expected = Config {
+            dual_ir_sensor: true,
+            ..ALL_ZERO_CONFIG
+        };
+        assert_eq!(Config::from_bits(1 << 6), expected);
+        assert_eq!(expected.as_bits(), 1 << 6);
     }
 
     #[test]
     fn bit7_ks_sign_negative() {
-        let cfg = Config::from_bits(1 << 7);
-        assert!(cfg.ks_sign_negative);
-        assert_eq!(cfg.as_bits(), 1 << 7);
+        let expected = Config {
+            ks_sign_negative: true,
+            ..ALL_ZERO_CONFIG
+        };
+        assert_eq!(Config::from_bits(1 << 7), expected);
+        assert_eq!(expected.as_bits(), 1 << 7);
     }
 
     #[test]
     fn bit14_kt2_sign_negative() {
-        let cfg = Config::from_bits(1 << 14);
-        assert!(cfg.kt2_sign_negative);
-        assert_eq!(cfg.as_bits(), 1 << 14);
+        let expected = Config {
+            kt2_sign_negative: true,
+            ..ALL_ZERO_CONFIG
+        };
+        assert_eq!(Config::from_bits(1 << 14), expected);
+        assert_eq!(expected.as_bits(), 1 << 14);
     }
 
     #[test]
     fn bit15_sensor_selftest_disabled() {
-        let cfg = Config::from_bits(1 << 15);
-        assert!(cfg.sensor_selftest_disabled);
-        assert_eq!(cfg.as_bits(), 1 << 15);
+        let expected = Config {
+            sensor_selftest_disabled: true,
+            ..ALL_ZERO_CONFIG
+        };
+        assert_eq!(Config::from_bits(1 << 15), expected);
+        assert_eq!(expected.as_bits(), 1 << 15);
     }
 
     // IIR variants (bits 0-2)
@@ -551,23 +557,16 @@ mod config_tests {
     // Realistic mixed config
     #[test]
     fn realistic_config() {
-        // IIR=Step100(0b100), repeat_selftest=false, PwmMode=TaTobj1(0b00),
-        // dual_ir=false, ks_neg=false, FIR=Step128(0b100), Gain=Gain12_5(0b011),
-        // kt2_neg=false, selftest_disabled=false
-        //
-        // bits: 0b0_0_011_100_0_0_00_0_100 = 0x1C04
+        // 0b0001_1100_0000_0100 = 0x1C04
         let bits: u16 = 0b0001_1100_0000_0100;
-        let cfg = Config::from_bits(bits);
-        assert_eq!(cfg.iir, Iir::Step100);
-        assert!(!cfg.repeat_sensor_selftest);
-        assert_eq!(cfg.pwm_mode, PwmMode::TaTobj1);
-        assert!(!cfg.dual_ir_sensor);
-        assert!(!cfg.ks_sign_negative);
-        assert_eq!(cfg.fir, Fir::Step128);
-        assert_eq!(cfg.gain, Gain::Gain12_5); // bits 11-13 = 0b011
-        assert!(!cfg.kt2_sign_negative);
-        assert!(!cfg.sensor_selftest_disabled);
-        assert_eq!(cfg.as_bits(), bits);
+        let expected = Config {
+            iir: Iir::Step100,    // bits 0-2  = 0b100
+            fir: Fir::Step128,    // bits 8-10 = 0b100
+            gain: Gain::Gain12_5, // bits 11-13 = 0b011
+            ..ALL_ZERO_CONFIG
+        };
+        assert_eq!(Config::from_bits(bits), expected);
+        assert_eq!(expected.as_bits(), bits);
     }
 
     // Round-trip: from_bits → as_bits preserves bits

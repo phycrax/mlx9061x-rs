@@ -130,6 +130,32 @@ fn can_set_emissivity() {
 }
 
 #[test]
+fn can_get_config_1() {
+    let mut sensor = new_mlx90614(&[I2cTrans::write_read(
+        mlx90614::DEV_ADDR,
+        vec![Reg::CONFIG_1],
+        vec![0x04, 0x04, 172],
+    )]);
+    // 0x0404 = 0b0000_0100_0000_0100
+    let config = sensor.config_1().unwrap();
+    assert_eq!(
+        config,
+        mlx9061x::mlx90614::Config {
+            iir: mlx9061x::mlx90614::Iir::Step100, // bits 0-2  = 0b100
+            repeat_sensor_selftest: false,
+            pwm_mode: mlx9061x::mlx90614::PwmMode::TaTobj1,
+            dual_ir_sensor: false,
+            ks_sign_negative: false,
+            fir: mlx9061x::mlx90614::Fir::Step128, // bits 8-10 = 0b100
+            gain: mlx9061x::mlx90614::Gain::Gain1, // bits 11-13 = 0b000
+            kt2_sign_negative: false,
+            sensor_selftest_disabled: false,
+        }
+    );
+    destroy(sensor);
+}
+
+#[test]
 fn can_set_config_1() {
     let mut sensor = new_mlx90614(&[
         // config_1() read: initial value 0x0000
