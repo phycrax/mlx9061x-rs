@@ -42,12 +42,14 @@ impl Default for SlaveAddr {
 /// Temperature value
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Temperature(
-    /// Raw temperature value
-    pub u16,
-);
+pub struct Temperature(pub(crate) u16);
 
 impl Temperature {
+    /// Raw temperature value
+    pub fn raw(&self) -> u16 {
+        self.0
+    }
+
     /// Temperature in kelvin
     pub fn kelvin(&self) -> f32 {
         self.0 as f32 * 0.02
@@ -76,5 +78,34 @@ impl Temperature {
     /// Temperature in millifahrenheit
     pub fn millifahrenheit(&self) -> i32 {
         self.millikelvin() as i32 * 9 / 5 - 459670
+    }
+}
+
+#[cfg(test)]
+mod temperature_tests {
+    use super::Temperature;
+
+    #[test]
+    fn conversions() {
+        let temp = Temperature(13658);
+        assert_eq!(temp.raw(), 13658);
+        assert!((temp.kelvin() - 273.16).abs() < 0.001);
+        assert!((temp.celsius() - 0.01).abs() < 0.001);
+        assert!((temp.fahrenheit() - 32.018).abs() < 0.001);
+        assert_eq!(temp.millikelvin(), 273160);
+        assert_eq!(temp.millicelsius(), 10);
+        assert_eq!(temp.millifahrenheit(), 32018);
+    }
+
+    #[test]
+    fn zero() {
+        let temp = Temperature(0);
+        assert_eq!(temp.raw(), 0);
+        assert!((temp.kelvin() - 0.0).abs() < 0.001);
+        assert!((temp.celsius() - (-273.15)).abs() < 0.001);
+        assert!((temp.fahrenheit() - (-459.67)).abs() < 0.001);
+        assert_eq!(temp.millikelvin(), 0);
+        assert_eq!(temp.millicelsius(), -273150);
+        assert_eq!(temp.millifahrenheit(), -459670);
     }
 }
