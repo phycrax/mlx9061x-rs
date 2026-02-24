@@ -38,12 +38,14 @@ impl Default for SlaveAddr {
 /// Temperature value
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Temperature(
-    /// Raw temperature value
-    pub u16,
-);
+pub struct Temperature(pub(crate) u16);
 
 impl Temperature {
+    /// Raw temperature value
+    pub fn raw(&self) -> u16 {
+        self.0
+    }
+
     /// Temperature in kelvin
     pub fn kelvin(&self) -> f32 {
         self.0 as f32 * 0.02
