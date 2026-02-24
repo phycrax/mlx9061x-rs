@@ -174,7 +174,6 @@ pub fn wake_mlx90614<E, SclPin: OutputPin<Error = E>, SdaPin: OutputPin<Error = 
 /// IIR filter settings (Bits 0-2)
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum Iir {
     /// 50% - a1=0.5, b=0.5
     Step50 = 0b000,
@@ -197,7 +196,6 @@ pub enum Iir {
 /// PWM mode configuration (Bits 4-5)
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum PwmMode {
     /// PWM mode - Ta, Tobj1
     TaTobj1 = 0b00,
@@ -212,7 +210,6 @@ pub enum PwmMode {
 /// FIR filter settings (Bits 8-10)
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum Fir {
     /// Not recommended
     Step8 = 0b000,
@@ -235,7 +232,6 @@ pub enum Fir {
 /// Amplifier gain settings (Bits 11-13)
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
 pub enum Gain {
     /// Gain = 1
     Gain1 = 0b000,
