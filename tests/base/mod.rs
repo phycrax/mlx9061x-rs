@@ -14,6 +14,7 @@ pub mod mlx90614 {
         pub const TOBJ1: u8 = 0x07;
         pub const TOBJ2: u8 = 0x08;
         pub const EMISSIVITY: u8 = 0x04 | EEPROM_COMMAND;
+        pub const CONFIG_1: u8 = 0x05 | EEPROM_COMMAND;
         pub const ADDRESS: u8 = 0x0E | EEPROM_COMMAND;
         pub const ID0: u8 = 0x1C | EEPROM_COMMAND;
     }

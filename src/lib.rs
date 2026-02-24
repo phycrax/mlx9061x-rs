@@ -194,7 +194,7 @@
 //! # }
 //! # let sda = IoPin;
 //! # let scl = IoPin;
-//! use mlx9061x::{Mlx9061x, SlaveAddr, wake_mlx90614};
+//! use mlx9061x::{Mlx9061x, SlaveAddr, mlx90614::wake_mlx90614};
 //!
 //! let i2cdev = I2c1::new(scl, sda); // This depends on your HAL
 //! let addr = SlaveAddr::default();

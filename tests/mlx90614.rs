@@ -5,7 +5,7 @@ use embedded_hal_mock::eh1::{
     i2c::Transaction as I2cTrans,
     pin::{Mock as PinMock, State as PinState, Transaction as PinTrans},
 };
-use mlx9061x::{wake_mlx90614, SlaveAddr};
+use mlx9061x::{mlx90614::wake_mlx90614, SlaveAddr};
 
 macro_rules! read_f32_test {
     ($name:ident, $method:ident, $reg:expr, $data0:expr, $data1:expr, $data2:expr, $expected:expr) => {
@@ -126,6 +126,25 @@ fn can_set_emissivity() {
         I2cTrans::write(mlx90614::DEV_ADDR, vec![Reg::EMISSIVITY, 51, 179, 254]),
     ]);
     sensor.set_emissivity(0.7, &mut NoopDelay {}).unwrap();
+    destroy(sensor);
+}
+
+#[test]
+fn can_set_config_1() {
+    let mut sensor = new_mlx90614(&[
+        // config_1() read: initial value 0x0000
+        I2cTrans::write_read(mlx90614::DEV_ADDR, vec![Reg::CONFIG_1], vec![0, 0, 228]),
+        // set_config_1 -> write_u16_eeprom: erase (write 0x0000)
+        I2cTrans::write(mlx90614::DEV_ADDR, vec![Reg::CONFIG_1, 0, 0, 67]),
+        // set_config_1 -> write_u16_eeprom: write new value 0x0404
+        I2cTrans::write(mlx90614::DEV_ADDR, vec![Reg::CONFIG_1, 4, 4, 11]),
+        // set_config_1 -> config_1() verify read
+        I2cTrans::write_read(mlx90614::DEV_ADDR, vec![Reg::CONFIG_1], vec![4, 4, 172]),
+    ]);
+    let mut config = sensor.config_1().unwrap();
+    config.iir = mlx9061x::mlx90614::Iir::Step100;
+    config.fir = mlx9061x::mlx90614::Fir::Step128;
+    sensor.set_config_1(config, &mut NoopDelay {}).unwrap();
     destroy(sensor);
 }
 

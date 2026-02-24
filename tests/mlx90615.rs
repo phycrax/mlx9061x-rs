@@ -5,7 +5,7 @@ use embedded_hal_mock::eh1::{
     i2c::Transaction as I2cTrans,
     pin::{Mock as PinMock, State as PinState, Transaction as PinTrans},
 };
-use mlx9061x::{wake_mlx90615, SlaveAddr};
+use mlx9061x::{mlx90615::wake_mlx90615, SlaveAddr};
 
 macro_rules! read_f32_test {
     ($name:ident, $method:ident, $reg:expr, $data0:expr, $data1:expr, $data2:expr, $expected:expr) => {
